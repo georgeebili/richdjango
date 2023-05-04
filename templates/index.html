@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test title</title>
+
+        <meta property="og:url" content="/">
+        <meta property="og:type" content="website">
+        <meta content="" property="og:image">
+        <meta content="" property="og:description">
+        <meta content="" property="og:title">
+        <meta content="" name="description">
+        
+        {% include 'layouts/public/head.html' %}
+    </head>
+    <body>
+        <!--Nav-->
+        {% include 'layouts/public/nav.html' %}
+        
+        <!--Main Body-->
+        <main class="af-body-container">
+            <section class="flex-form-box">
+                <div class="af-row af-auto-gap column-at-center">
+                    <a class="af-nav-link  bg-on-link-button flex af-nav-wrap-between by-gap-bottom">
+                        <div class="af-gap-horizon">Test 1</div>
+                    </a>
+
+                    <a class="af-nav-link  bg-on-link-button flex af-nav-wrap-between by-gap-bottom">
+                        <div class="af-gap-horizon">option 2</div>
+                    </a>
+
+                    <a class="af-nav-link  bg-on-link-button flex af-nav-wrap-between by-gap-bottom" >
+                        <div class="af-gap-horizon">Test3</div>
+                    </a>
+                </div>
+            </section>
+        </main>
+        <!--Footer-->
+        {% include 'layouts/public/footer.html' %}
+       
+    </body>
+</html>
