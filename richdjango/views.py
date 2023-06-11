@@ -1,6 +1,7 @@
-from Component.Assemble import render
+from Component.Assembler import render, HttpRequest
 
-def indexPage(request): return render(request, 'index.html')
+def indexPage(request: HttpRequest):
+    return render(request, 'index.html')
 
 
 # Activate Admin

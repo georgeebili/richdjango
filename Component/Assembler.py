@@ -5,7 +5,7 @@ we will be using all across our application.
 import time
 import os
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpRequest
 
 #from richdjango.models import 
 

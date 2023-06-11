@@ -2,8 +2,10 @@
 Usage:
 """
 import typing
+from typing import Dict, List
+from django.http import HttpRequest
 
-def MultipleRequestPostText(request, fields=[], reactiveFunc=None) -> typing.List[str]:
+def MultipleRequestPostText(request: HttpRequest, fields: Dict[str]=[], reactiveFunc=None) -> List[str]:
 	data = []
 	for fid in fields:
 		item = request.POST[fid]
@@ -29,7 +31,7 @@ def ConvertDBDataTOList(db_data, classname):
         "<QuerySet", "{'QuerySet':").replace("<"+classname+":", "").replace("']>","']").replace(">","}"))
     return data
     
-def GetDictKey(dict):
+def GetDictKey(dict: dict):
     list = []
     for key in dict.keys():
         list.append(key)

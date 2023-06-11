@@ -134,9 +134,21 @@ class Fuse(object):
         for key in keys:
             if key not in self.fieldKeyList:
                 return False
-        newColumn = self.fuseTable(**fields)
+        newColumn: ModelFuseType = self.fuseTable(**fields)
         newColumn.save()
         return True
+    
+    def delete(self):
+        """The delete function for user in database.
+
+        Returns:
+            bool: Return's True when user or users body field is deleted from the database.
+                and False when the user is not found and connected to the database.
+        """
+        if self.isFuseConnected:
+            self.bodyFields.delete()
+            return True
+        return False
 
     def all(self) -> List[dict]:
         items = self.fuseTable.objects.all()

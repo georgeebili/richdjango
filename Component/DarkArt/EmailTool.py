@@ -11,10 +11,11 @@ from richdjango.settings import EMAIL_HOST_USER
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.http import HttpRequest
 
 class EmailApp(object):
     """ Manage all email activities"""
-    def __init__(self, request):
+    def __init__(self, request: HttpRequest):
         #initialize
         self.request = request
         #self.MY_URL =  request.get_raw_uri().split(':')[0]+"://"+request._get_raw_host()
