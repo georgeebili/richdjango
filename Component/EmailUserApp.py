@@ -8,10 +8,11 @@ Manage all email logic
 """
 
 from .DarkArt.EmailTool import EmailApp
+from django.http import HttpRequest
 
 class Emailer(EmailApp):
     """ Manage all email activities"""
-    def __init__(self, request):
+    def __init__(self, request: HttpRequest):
         super().__init__(request)
           
     def sendEmailVerification(self, userID, email: str, emailpin: str):
