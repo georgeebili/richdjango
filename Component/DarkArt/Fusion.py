@@ -137,7 +137,7 @@ class Fuse(object):
         newColumn: ModelFuseType = self.fuseTable(**fields)
         newColumn.save()
         return True
-    
+
     def delete(self):
         """The delete function for user in database.
 
@@ -154,6 +154,9 @@ class Fuse(object):
         items = self.fuseTable.objects.all()
         if items.count():
             datas = ListDBData(items, self.__dbName)
+            self.bodyFields = item
+            self.isFuseConnected = True
+            self.bodyField = item
             for i in range(len(datas)):
                 item: dict = datas[i]
                 for key in item.keys():
@@ -161,4 +164,27 @@ class Fuse(object):
                 datas[i] = item
             return datas
         return []
- 
+
+    def count(self, fields={}) -> int:
+        """
+        Count items in the model table. count items base on fields specified.
+        Example field={"firstname": "George"} or fields={"date": "20/10/2023", "isActive": True}
+        This will search for items containing this fields in the table and return the
+        total number of the items found having such fields.
+
+        Args:
+            fields (dict[field,value]): fields and values to filter with. Defaults to {}.
+
+        Returns:
+            int: Total number of items found
+        """
+        totalItems = 0
+        if not self.isFuseConnected:
+            if fields:
+                totalItems = self.fuseTable.objects.complex_filter(fields).count()
+            else:
+                totalItems = self.fuseTable.objects.all().count()
+        else:
+            totalItems = self.bodyFields.count()
+        return totalItems
+
