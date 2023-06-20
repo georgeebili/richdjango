@@ -151,12 +151,20 @@ class Fuse(object):
         return False
 
     def all(self) -> List[dict]:
+        """
+        Get all the items in a model table and prepare it in a dictionary format.
+
+        Warning: Do not use this approach if your table has a large amount of data.
+
+        Returns:
+            List[dict]: List of all the items in the database table model
+        """
         items = self.fuseTable.objects.all()
         if items.count():
             datas = ListDBData(items, self.__dbName)
-            self.bodyFields = item
+            self.bodyFields = items
             self.isFuseConnected = True
-            self.bodyField = item
+            self.bodyField = items
             for i in range(len(datas)):
                 item: dict = datas[i]
                 for key in item.keys():
