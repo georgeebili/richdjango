@@ -138,16 +138,47 @@ class Fuse(object):
         newColumn.save()
         return True
 
-    def delete(self):
+    def delete(self, field: dict={}):
         """The delete function for user in database.
 
+        Example field={"firstname": "George"} or fields={"date": "20/10/2023", "isActive": True}
+        This will search for items containing this fields in the table and delete the items,
+        in a case where field is not spacified, then everything in the table is deleted.
+
+        Args:
+            fields (dict[field,value]): fields and values to filter with. Defaults to {}.
+            
         Returns:
             bool: Return's True when user or users body field is deleted from the database.
                 and False when the user is not found and connected to the database.
         """
+
         if self.isFuseConnected:
+            self.isFuseConnected = False
             self.bodyFields.delete()
             return True
+        else:
+            if field:
+                keys = list(field.keys())
+                # ensure all field are contain in the main table fields(self.fieldKeys)
+                for key in keys:
+                    if key not in self.fieldKeyList:
+                        print('The field: ', key, ' is Not in main field cross',
+                              ' check the spelling in ', self.__dbName,' of models.py')
+                        return False
+
+                item = self.fuseTable.objects.complex_filter(field)
+                if item:
+                    self.isFuseConnected = False
+                    item.delete()
+                    return True
+
+            items = self.fuseTable.objects.all()
+            if items:
+                self.isFuseConnected = False
+                items.delete()
+                return True
+
         return False
 
     def all(self) -> List[dict]:
