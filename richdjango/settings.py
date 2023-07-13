@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from richdjango import production
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,9 +29,9 @@ TEMPLATE_DIR = BASE_DIR / 'templates'
 SECRET_KEY ='vi-f84vi)i!&l!yy0(#mn7t%(nsi7)==glezoumsk8y(k7q$v%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = production.DEBUG # True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = production.ALLOWED_HOSTS # ["*"]
 
 
 # Application definition
@@ -105,10 +107,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "" #'example.com'
-EMAIL_PORT = "465" #'26'
-EMAIL_HOST_USER = "" #'username@example.com'
-EMAIL_HOST_PASSWORD = "" #'email password'
+EMAIL_HOST = production.EMAIL_HOST #'example.com'
+EMAIL_PORT = production.EMAIL_PORT # "465" #'26'
+EMAIL_HOST_USER = production.EMAIL_HOST_USER #'username@example.com'
+EMAIL_HOST_PASSWORD = production.EMAIL_HOST_PASSWORD #'email password'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
@@ -117,7 +119,7 @@ EMAIL_USE_SSL = True
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = production.TIME_ZONE # "UTC"
 
 USE_I18N = True
 

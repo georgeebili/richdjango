@@ -1,4 +1,4 @@
-from .DarkArt.IDApp import IDApp
+from .DarkArt.IDApp import IDApp, DeleteID
 
 class UniqueIDApp(IDApp):
     """

@@ -7,16 +7,19 @@ import os
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpRequest
 
-#from richdjango.models import 
+# Django time customization
+from richdjango.production import DjangoTime
 
-from pathlib import Path
-# for building like DIR_Path / 'subdir'.
-AppDirectory = Path(__file__).resolve().parent.parent
-MediaDirecory = AppDirectory / 'cdn' / 'resources'
-#MediaDirecory = AppDirectory.parent / 'accounting-app.errorcake.com' / 'cdn' / 'resources'
+# Email component
+from Component.EmailUserApp import Emailer
 
-from .DarkArt.MagicBox import (MultipleRequestPostText, ReplaceTOHtmlCharacter,
+# Application Directory path
+from richdjango.production import AppDirectory, MediaDirecory
+
+# Import component that is responsible for creating unique IDs
+from Component.IDHandler import UniqueIDApp, DeleteID
+
+from Component.DarkArt.MagicBox import (MultipleRequestPostText, ReplaceTOHtmlCharacter,
     ReverseReplaceTOHtmlCharacter, ArrayDBData, ListDBData, UploadFileHandler,
-    ConvertDBDataTOArray, ConvertDBDataTOList, GetDictKey
+    ConvertDBDataTOArray, ConvertDBDataTOList, GetDictKey, DeleteFile
 )
-

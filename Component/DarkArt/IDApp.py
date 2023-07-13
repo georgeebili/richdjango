@@ -57,12 +57,12 @@ class IDApp():
             for i in range(by): idCharaters += choice(self.combination)
         return idCharaters
 
-    def deleteFromIDManager(self, value, name=""):
-        record = IDManager
-        if name:
-            record = IDManager.objects.filter(value = value, name=name)
-        else:
-            record = IDManager.objects.filter(value = value)
-        if record.exists():
-            record.delete()
+def DeleteID(value, name=""):
+    record = IDManager
+    if name:
+        record = IDManager.objects.filter(value = value, name=name)
+    else:
+        record = IDManager.objects.filter(value = value)
+    if record.exists():
+        record.delete()
 

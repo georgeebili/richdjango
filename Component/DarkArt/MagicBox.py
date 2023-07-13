@@ -61,3 +61,11 @@ def UploadFileHandler(file, filename: str, fileUploadPath: str):
         return True
     except:
         return False
+
+def DeleteFile(FilePath: str) -> bool:
+    import os
+    try:
+        os.remove(FilePath)
+        return True
+    except:
+        return False
