@@ -5,7 +5,7 @@ import typing
 from typing import Dict, List
 from django.http import HttpRequest
 
-def MultipleRequestPostText(request: HttpRequest, fields: Dict[str]=[], reactiveFunc=None) -> List[str]:
+def MultipleRequestPostText(request: HttpRequest, fields: List[Dict]=[], reactiveFunc=None) -> List[str]:
 	data = []
 	for fid in fields:
 		item = request.POST[fid]
