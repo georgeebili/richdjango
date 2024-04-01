@@ -8,7 +8,11 @@ class IDManager(models.Model):
     value = models.TextField(default="")
     name = models.TextField(default="")
     def __str__(self):
-        return f"{{'value':'''{self.value}''', 'name':'''{self.name}'''}}"
+        items = self.__dict__
+        if items.__contains__('_state'): del items['_state']
+        for i in items.keys():
+            if type(items[i]) is not bool: items[i] = str(items[i])
+        return str(items)
 
 class App(models.Model):
     username = models.TextField(default="admin")
@@ -17,5 +21,8 @@ class App(models.Model):
     session = models.TextField(default="0.0")
     email = models.EmailField(default="", max_length=50)
     def __str__(self):
-        return f"{{'username':'''{self.username}''' , 'password':'''{self.password}''',\
-            'name':'''{self.name}''', 'session':'''{self.session}''', 'email':'''{self.email}'''}}"
+        items = self.__dict__
+        if items.__contains__('_state'): del items['_state']
+        for i in items.keys():
+            if type(items[i]) is not bool: items[i] = str(items[i])
+        return str(items)
