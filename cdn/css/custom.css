@@ -387,9 +387,6 @@ button { background-color: transparent; cursor: pointer;}
     .sidebar-wrap { width: 90%; }
 
     /* Button */
-    .affect-button {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
+    .affect-button {padding-left: 5px; padding-right: 5px;}
 
 }

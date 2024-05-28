@@ -16,13 +16,13 @@ class Emailer(EmailApp):
         super().__init__(request)
           
     def sendEmailVerification(self, userID: str, email: str, emailpin: str):
-        #print(self.MY_URL+"/verify/"+user_id+"/"+emailpin)
+        #print(self.siteURLL+"/verify/"+user_id+"/"+emailpin)
         title = ""
         message = ""
         self.sendMail(subject=title, email=email, messageBody=message)
         
     def sendPasswordResetMail(self, email: str, passwordResetValue: str):
-        #print(self.MY_URL+"/resetpassword/"+rpv)
+        #print(self.siteURL+"/resetpassword/"+rpv)
         title = ""
         message = ""
         self.sendMail(subject=title, email=email, messageBody=message)
