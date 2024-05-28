@@ -23,5 +23,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     #path("admin/", admin.site.urls),
     path("", views.indexPage),
+    path('example-signup', views.signupPage),
 ]
 urlpatterns += static(settings.CDN_URL, document_root=settings.CDN_ROOT)

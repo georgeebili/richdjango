@@ -7,6 +7,18 @@ Note this application is strictly for Python3.
 
 I defined the process of wrapping a model with another component(class) for extending and adding extra functonality to the model as **Model Fusion**
 
+## Instruction/Guide
+
+Install python3.8 or above.
+Install the app requirements
+```pip3 install -r requirements.txt```
+
+To start the application
+```./start.bat```
+
+For migration after updates in models.py
+```./dbm.bat```
+
 ## Structure
 
 richdjango(App root):

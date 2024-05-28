@@ -1,7 +1,13 @@
 from Component.Assembler import render, HttpRequest
 
+from Component.ExampleApp import ExampleSignUp
+
 def indexPage(request: HttpRequest):
     return render(request, 'index.html')
+
+def signupPage(req):
+    # example of how to use component. Now export this function to urls.py and link it to a url as the function.
+    return ExampleSignUp(req).signup()
 
 
 # Activate Admin

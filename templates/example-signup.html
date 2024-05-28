@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sign Up - {{title}}</title>
+        <meta property="og:url" content="{{siteUrl}}/signup">
+        <meta content="{{siteUrl}}/cdn/image/account.png" property="og:image">
+        <meta content="{{siteUrl}}/cdn/image/icon.png" property="image">
+        <meta content="Sign Up - {{title}}" property="og:title">
+        <meta content="{{desc}}" name="description">
+        <meta content="{{desc}}" property="og:description">
+        {% include 'layouts/public/head.html' %}
+    </head>
+    <body>
+        <!--Nav-->
+        {% include 'layouts/public/nav.html' %}
+        
+        <!--Main Body-->
+        <main class="main-column-container">
+
+            <section class="section-box af-center-row af-grid-by2 wave-background">
+                <div>
+                    <h2 class="af-gap-x2-bottom header-2nd-title">Join the {{title}} Community,</h2>
+                    <p class="header-text">Create an account!</p>
+                </div>
+
+                <div class="flex-form-box">
+                    {% if isEmailError %}
+                    <div class="{{error.className}}">{{error.user.create.email}}</div>
+                    {% elif isPhoneNumberError %}
+                    <div class="{{error.className}}">{{error.user.create.phonenumber}}</div>
+                    {% endif %}
+                    <form class="af-full-form af-auto-gap land-form-width" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="text" class="af-large-input by-gap-bottom" placeholder="First Name" name="firstname" required>  
+                            <input type="text" class="af-large-input by-gap-bottom" placeholder="Last Name" name="lastname" required> 
+                            <input type="tel" min="8" max="14" class="af-large-input by-gap-bottom" placeholder="Phone Number" name="phonenumber" required>                
+                            <input type="email" class="af-large-input by-gap-bottom" placeholder="Email Address" name="email" required>
+                            <input type="text" min="8" class="af-large-input by-gap-bottom" placeholder="Password" name="password" required>
+                            <div style="display: grid;">
+                                <small>Select Profile Pics</small>
+                                <input type="file" accept="image/*" class="af-large-input" name="image" required>
+                            </div>
+                            <div>
+                                <img af-cms="property-image-value" alt="Profile Pics" width="150" height="150" style="border-radius: 50%;">
+                                <button class="af-input af-btn af-btn-flow bg-dark-red" af-cms="property-image-del" type="button">clear</button>
+                            </div>
+                            <button type="submit" class="af-btn af-btn-flow sharp-button block">Register</button>
+                            <input type="hidden" name="csrfmiddlewaretoken" disabled="">
+                            <div class="af-row af-nav-wrap-between af-gap-vertical">
+                                <label>Already have an account?</label>
+                                <a href="/signin" class="plain-link c-black">Sign In!</a>
+                            </div>
+                    </form>
+                </div>                
+            </section>
+        </main>
+        <footer>
+            {% include 'layouts/public/footer.html' %}
+        </footer>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                var imageSelector = document.querySelector(`[name="image"]`);
+                var imageRender = document.querySelector(`[af-cms="property-image-value"]`);
+                var clearImage = document.querySelector(`[af-cms="property-image-del"]`);
+
+                // load uploaded image binary to image screen
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', ()=> {
+                    imageRender.src = fileReader.result;
+                });
+
+                // add image file action
+                imageSelector.addEventListener('change', ()=> {
+                    if (imageSelector.value) {
+                        fileReader.readAsDataURL(imageSelector.files[0])
+                    }
+                });
+
+
+                // delete image action
+                clearImage.addEventListener('click', ()=>{
+                    imageSelector.value = '';
+                    imageRender.src = '';
+                });
+            });
+        </script>
+    </body>
+</html>

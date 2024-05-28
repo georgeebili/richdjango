@@ -2,7 +2,7 @@ from pathlib import Path
 # for building like DIR_Path / 'subdir'.
 AppDirectory = Path(__file__).resolve().parent.parent
 
-# production state
+# production state | Update this varaible on development(False)|production(True)
 LIVE = False
 
 # development version of django settings goes here
