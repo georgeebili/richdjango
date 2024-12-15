@@ -37,12 +37,13 @@ class Fuse(object):
         self.__dbName = FuseTable.__name__ #"Package"
         self.__connectionField = ""
         self.__connectionValue = ""
+        self.__query = {}
         self.field: MASTER_TYPE = self
 
     def connect(self, field, value, additional={}):
-        query = {f"{field}": value}
-        query.update(additional)
-        item = self.fuseTable.objects.complex_filter(query)
+        self.__query = {f"{field}": value}
+        self.__query.update(additional)
+        item = self.fuseTable.objects.complex_filter(self.__query)
         if item.exists():
             if item.count() == 1:
                 self.__connectionField = field
@@ -69,13 +70,15 @@ class Fuse(object):
         self.isFuseConnected = False
         self.bodyField = None
         self.bodyFields = None
+        self.__query = {}
         return self
     
     def getArray(self):
         if self.bodyField:
             data = ArrayDBData(self.bodyField, self.__dbName)
             for key in data.keys():
-                data[key] = ReverseReplaceTOHtmlCharacter(data[key])
+                if type(data[key]) not in [bool, int, float]:
+                    data[key] = ReverseReplaceTOHtmlCharacter(data[key])
             return data
         return {}
     
@@ -85,7 +88,8 @@ class Fuse(object):
             for i in range(len(datas)):
                 item: dict = datas[i]
                 for key in item.keys():
-                    item[key] = ReverseReplaceTOHtmlCharacter(item[key])
+                    if type(item[key]) not in [bool, int, float]:
+                        item[key] = ReverseReplaceTOHtmlCharacter(item[key])
                 datas[i] = item
             return datas
         return []
@@ -105,22 +109,22 @@ class Fuse(object):
         for key in keys:
             if key not in self.fieldKeyList: return False
         
-        connectKey = list(connect.keys())
+        connectKeys = list(connect.keys())
         # ensure connection field are contain in the main table fields(self.fieldKeys)
-        for key in connectKey:
+        for key in connectKeys:
             if key not in self.fieldKeyList: return False
 
         if isConnected and keys and self.isFuseConnected:
-            updater = self.fuseTable.objects.get(**{self.__connectionField: self.__connectionValue})
+            updater = self.fuseTable.objects.get(**self.__query)
             for key in keys:
                 updater.__dict__[key] = fields[key]
                 self.__setattr__(key, fields[key])
             updater.save()
             return True
-        elif not isConnected and connectKey:
-            connectKey = connectKey[0]
-            connectValue = connect[connectKey]
-            updater = self.fuseTable.objects.get(**{connectKey: connectValue})
+        elif not isConnected and connectKeys:
+            #connectKey = connectKeys[0]
+            #connectValue = connect[connectKeys]
+            updater = self.fuseTable.objects.get(**connect)
             for key in keys:
                 updater.__dict__[key] = fields[key]
                 self.__setattr__(key, fields[key])
@@ -199,7 +203,8 @@ class Fuse(object):
             for i in range(len(datas)):
                 item: dict = datas[i]
                 for key in item.keys():
-                    item[key] = ReverseReplaceTOHtmlCharacter(item[key])
+                    if type(item[key]) not in [bool, int, float]:
+                        item[key] = ReverseReplaceTOHtmlCharacter(item[key])
                 datas[i] = item
             return datas
         return []
