@@ -7,11 +7,12 @@ Created on Wenesday May 4, 16:28:54 2023
 Manage all email logic
 """
 
-from richdjango.settings import EMAIL_HOST_USER
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.http import HttpRequest
+from richdjango import production
+from email.utils import formataddr
 
 class EmailApp(object):
     """ Manage all email activities"""
@@ -22,7 +23,7 @@ class EmailApp(object):
         self.domainName = request.META.get('HTTP_HOST')
         self.protocal = request.META.get('wsgi.url_scheme')
         self.siteURL = self.protocal + '://' + self.domainName
-        self.fromEmail = EMAIL_HOST_USER
+        self.fromEmail = formataddr((production.SITE_NAME ,production.EMAIL_HOST_USER))
         self.overrideDomainCheck = False
         self.tempLocal = 'mail/'
 

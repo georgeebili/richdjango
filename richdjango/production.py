@@ -2,6 +2,8 @@ from pathlib import Path
 # for building like DIR_Path / 'subdir'.
 AppDirectory = Path(__file__).resolve().parent.parent
 
+SITE_NAME = "Rich Django"
+SHORT_NAME = ""
 # production state | Update this varaible on development(False)|production(True)
 LIVE = False
 
