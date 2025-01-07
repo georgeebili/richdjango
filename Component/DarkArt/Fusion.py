@@ -2,6 +2,9 @@ from richdjango.models import IDManager
 from typing import Union, List
 from django.db.models.manager import BaseManager
 from .MagicBox import ArrayDBData, ReverseReplaceTOHtmlCharacter, ListDBData
+#from datetime import datetime
+from datetime import datetime, date, time
+import re
 MASTER_TYPE = Union[IDManager, IDManager]
 
 class ModelFuseType(BaseManager):
@@ -20,7 +23,7 @@ class Fuse(object):
     def __init__(self, FuseTable: ModelFuseType) -> None:
         self.fuseTable: ModelFuseType = FuseTable #"Package"
         self.fieldKeyList = list(self.fuseTable.__dict__.keys())
-        self.exceptionFieldKeys = ["objects", "id", "MultipleObjectsReturned", "DoesNotExist", "__module__","__str__","__doc__", "_meta"]
+        self.exceptionFieldKeys = ["objects", "MultipleObjectsReturned", "DoesNotExist", "__module__","__str__","__doc__", "_meta"] #"id",
         self.fieldKeyWordExceptions = ["get_next_by", "get_previous_by"]
         for field in self.fieldKeyList:
             if field in self.exceptionFieldKeys:
@@ -37,13 +40,13 @@ class Fuse(object):
         self.__dbName = FuseTable.__name__ #"Package"
         self.__connectionField = ""
         self.__connectionValue = ""
-        self.__query = {}
+        self.query = {}
         self.field: MASTER_TYPE = self
 
     def connect(self, field, value, additional={}):
-        self.__query = {f"{field}": value}
-        self.__query.update(additional)
-        item = self.fuseTable.objects.complex_filter(self.__query)
+        self.query = {f"{field}": value}
+        self.query.update(additional)
+        item = self.fuseTable.objects.complex_filter(self.query)
         if item.exists():
             if item.count() == 1:
                 self.__connectionField = field
@@ -70,14 +73,40 @@ class Fuse(object):
         self.isFuseConnected = False
         self.bodyField = None
         self.bodyFields = None
-        self.__query = {}
+        self.query = {}
         return self
+    
+    def convert_to_date_time(self, value: str):
+        formats = [
+            (r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+$", "%Y-%m-%d %H:%M:%S.%f", datetime),
+            (r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$", "%Y-%m-%d %H:%M:%S", datetime),
+            (r"^\d{4}-\d{2}-\d{2}$", "%Y-%m-%d", date),
+            (r"^\d{2}:\d{2}:\d{2}\.\d+$", "%H:%M:%S.%f", time),
+            (r"^\d{2}:\d{2}:\d{2}$", "%H:%M:%S", time),
+            (r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+\+\d{2}:\d{2}$", "%Y-%m-%d %H:%M:%S.%f%z", datetime)
+        ]
+        
+        for regex, fmt, fmt_type in formats:
+            if re.match(regex, value):
+                try:
+                    dt = datetime.strptime(value, fmt)
+                    if fmt_type == datetime:
+                        return dt
+                    elif fmt_type == date:
+                        return dt.date()
+                    elif fmt_type == time:
+                        return dt.time()
+                except ValueError:
+                    continue
+        return value
     
     def getArray(self):
         if self.bodyField:
             data = ArrayDBData(self.bodyField, self.__dbName)
             for key in data.keys():
-                if type(data[key]) not in [bool, int, float]:
+                if key.__contains__('time') or key.__contains__('date'):
+                    data[key] = self.convert_to_date_time(data[key])
+                if type(data[key]) not in [bool, int, float, datetime, time, date]:
                     data[key] = ReverseReplaceTOHtmlCharacter(data[key])
             return data
         return {}
@@ -88,7 +117,9 @@ class Fuse(object):
             for i in range(len(datas)):
                 item: dict = datas[i]
                 for key in item.keys():
-                    if type(item[key]) not in [bool, int, float]:
+                    if key.__contains__('time') or key.__contains__('date'):
+                        item[key] = self.convert_to_date_time(item[key])
+                    if type(item[key]) not in [bool, int, float, datetime, time, date]:
                         item[key] = ReverseReplaceTOHtmlCharacter(item[key])
                 datas[i] = item
             return datas
@@ -115,7 +146,7 @@ class Fuse(object):
             if key not in self.fieldKeyList: return False
 
         if isConnected and keys and self.isFuseConnected:
-            updater = self.fuseTable.objects.get(**self.__query)
+            updater = self.fuseTable.objects.get(**self.query)
             for key in keys:
                 updater.__dict__[key] = fields[key]
                 self.__setattr__(key, fields[key])
@@ -231,4 +262,3 @@ class Fuse(object):
         else:
             totalItems = self.bodyFields.count()
         return totalItems
-

@@ -1,12 +1,12 @@
 """
 first thing is to import the models we want to create a fuse for before definding their fuse.
 Example:
-from richdjango.models import SourceCodeDB, UserDB
+from richdjango.models import ClientDB, UserDB
 
 class ClientDBFuse(Fuse):
     def __init__(self) -> None:
-        Fuse.__init__(self, SourceCodeDB)
-        self.field: SourceCodeDB = self
+        Fuse.__init__(self, ClientDB)
+        self.field: ClientDB = self
  
 class UserFuse(Fuse):
     def __init__(self):
